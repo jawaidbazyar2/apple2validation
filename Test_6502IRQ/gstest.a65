@@ -1,0 +1,97 @@
+
+* If IRQ fires after CLI, this will print hex values from 0001 to 0100.
+* If IRQ fires after SEI, it will only print 0001.
+
+; this is behaving differently in the debugger versus live because the
+; debugger is running the video scanner for a full frame which is affecting
+; all the interrupt states!
+
+GETLNPROMPT  equ $33
+IRQVECT     equ $3FE
+VBLVECT     equ $E10010
+PRHEX       equ $FDDA
+NEWLINE     equ $FD8E
+MONENTRY    equ $FF69
+DOSENTRY    equ $03D0
+
+; GS VBL Registers
+INTEN       equ $C041
+INTFLAG     equ $C046
+CLRVBLINT   equ $C047
+RDVBLBAR    equ $C019
+
+            org $0800
+
+            SEI
+
+* Take over main system IRQ vector, otherwise ROM will steal VBL
+* interrupt.        
+            ;LDA   #irqhandler
+            ;STA   IRQVECT
+            ;LDA   #>irqhandler
+            ;STA   IRQVECT+1
+
+            LDA    #irqhandler
+            STAL   VBLVECT+1
+            LDA    #>irqhandler
+            STAL    VBLVECT+2
+            lda    #0
+            STAL    VBLVECT+3
+
+* then turn the vbl interrupt on (it might not fire the first time...)
+* If so, we will immediately fall through and print nothing
+
+            LDA   #8
+            STA   CLRVBLINT
+            STA   INTEN     ; enable VBL interrupts
+
+* Spin waiting for VBL to occur
+waitvbl
+            LDA   INTFLAG
+            AND   #8
+            BEQ   waitvbl
+
+* by now the VBL should have fired..
+
+            LDA   #$00
+            STA   count
+            STA   count+1
+
+            CLI             ; test the 65xx interrupt and inhibit behavior
+            SEI
+
+            LDA   count
+            STA   $06
+            LDA   count+1
+            STA   $07
+
+            LDA   #0        ; disable VBL interrupt
+            STA   INTEN
+
+            LDA   GETLNPROMPT
+            CMP   #$AA
+            BEQ   ISMON
+            JMP   DOSENTRY
+ISMON
+            JMP   MONENTRY
+
+irqhandler
+            PHP
+            INC   count
+            BNE   skip1
+            INC   count+1
+
+            LDA   #0            ; we hit 0x100, disable interrupt.
+            STA   INTEN
+
+skip1       PHA
+            LDA   count+1
+            JSR   PRHEX
+            LDA   count
+            JSR   PRHEX
+            JSR   NEWLINE
+            PLA
+            PLP
+            RTI
+
+count       ds 2

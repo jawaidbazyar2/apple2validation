@@ -1,0 +1,62 @@
+
+GETLNPROMPT  equ $33
+IRQVECT     equ $3FE
+PRHEX       equ $FDDA
+NEWLINE     equ $FD8E
+MONENTRY    equ $FF69
+DOSENTRY    equ $03D0
+
+; Mockingboard Regs
+T1CL        equ $C404
+T1CH        equ $C405
+IER         equ $C40E
+
+            org $0800
+
+            SEI
+            LDA   #irqhandler
+            STA   IRQVECT
+            LDA   #>irqhandler
+            STA   IRQVECT+1
+            LDA   #$C0
+            STA   IER
+            LDA   #$00
+            STA   T1CL
+            LDA   #$00
+            STA   T1CH
+            LDA   #$00
+            STA   count
+            STA   count+1
+            CLI
+            SEI
+            LDA   count
+            STA   $06
+            LDA   count+1
+            STA   $07
+            LDA   #$40
+            STA   IER
+            LDA   GETLNPROMPT
+            CMP   #$AA
+            BEQ   ISMON
+            JMP   DOSENTRY
+ISMON
+            JMP   MONENTRY
+
+irqhandler
+            PHP
+            INC   count
+            BNE   skip1
+            INC   count+1
+            LDA   #$40          ; if we have rolled arount to count=0x0100, clr interrupt
+            STA   IER
+skip1       PHA
+            LDA   count+1
+            JSR   PRHEX
+            LDA   count
+            JSR   PRHEX
+            JSR   NEWLINE
+            PLA
+            PLP
+            RTI
+
+count       ds 2
