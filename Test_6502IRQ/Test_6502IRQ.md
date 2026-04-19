@@ -65,14 +65,16 @@ A mockingboard timer interrupt (mbtest) or a VBL interrupt (gstest) are triggere
 
 ## Test Results
 
-| Platform | Version | Result |
-|-|-|-|
-| Apple IIe + MB | 65c02 |
-| Apple IIgs | ROM01 | single 0001 |
-| perfect6502 | | interrupt triggered after SEI |
-| GSSquared | 0.7.2 | |
-| GSSquared | 0.7.3 | |
+| Platform | Version | Result | Contributor |
+|-|-|-|-|
+| Apple IIe + MB | 65c02 | single 0001 | Nick Bauer |
+| Apple IIgs | ROM01 | single 0001 | me |
+| Apple IIgs | ROM03 | single 0001 | Nick Bauer |
+| perfect6502 | | interrupt triggered after SEI | |
+| GSSquared | 0.7.2 | 0001 | this result was accidental |
+| GSSquared | 0.7.4 | 0001 | will be fixed in latest version |
 | Apple2ts | Apr 19, 2026 | IRQ never stops, numbers print indefinitely |
+| ApplEm | Apr 19, 2026 | single 0001 | Mike Daley |
 
 
 ## Building the Test
