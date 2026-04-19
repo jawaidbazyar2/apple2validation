@@ -16,3 +16,5 @@ Each test directory will also show the expected test results, along with a narra
 
 And finally, I'd like to start collecting information on test results across a range of different emulators. But the most important starting point is real hardware.
 
+[The List of Tests](Tests.md)
+
