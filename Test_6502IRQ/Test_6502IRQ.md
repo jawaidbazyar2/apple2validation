@@ -65,6 +65,8 @@ A mockingboard timer interrupt (mbtest) or a VBL interrupt (gstest) are triggere
 
 ## Test Results
 
+From hardware the correct response is: single 0001
+
 | Platform | Version | Result | Contributor |
 |-|-|-|-|
 | Apple IIe + MB | 65c02 | single 0001 | Nick Bauer |
