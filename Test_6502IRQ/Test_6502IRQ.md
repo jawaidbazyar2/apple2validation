@@ -75,6 +75,7 @@ A mockingboard timer interrupt (mbtest) or a VBL interrupt (gstest) are triggere
 | GSSquared | 0.7.4 | 0001 | will be fixed in latest version |
 | Apple2ts | Apr 19, 2026 | IRQ never stops, numbers print indefinitely |
 | ApplEm | Apr 19, 2026 | single 0001 | Mike Daley |
+| Mariani | 1.5(1) | 0001 - 0100 | me |
 
 
 ## Building the Test
