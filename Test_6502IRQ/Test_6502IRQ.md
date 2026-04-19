@@ -42,6 +42,10 @@ For this test we require an interrupt source that will run on an Apple IIe and a
 
 ## Running the Test
 
+Disk Images: 
+[MBTest 800K](mbtest.po) | 
+[MBTest 140K](mbtest140.po)
+
 1. Boot the disk image.
 2. Ctrl-Reset (just to make sure no other interrupts are stuck on)
 3. BLOAD MBTEST (IIe + Mockingboard)   or BLOAD GSTEST (IIgs)
@@ -65,6 +69,7 @@ A mockingboard timer interrupt (mbtest) or a VBL interrupt (gstest) are triggere
 |-|-|-|
 | Apple IIe + MB | 65c02 |
 | Apple IIgs | ROM01 | single 0001 |
+| perfect6502 | | interrupt triggered after SEI |
 | GSSquared | 0.7.2 | |
 | GSSquared | 0.7.3 | |
 | Apple2ts | Apr 19, 2026 | IRQ never stops, numbers print indefinitely |
